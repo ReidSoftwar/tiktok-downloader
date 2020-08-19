@@ -28,7 +28,6 @@ target 'tiktokSafe' do
   pod 'FirebaseFirestoreSwift'
   pod 'Firebase/Core'
   pod 'Firebase/Performance'
-  pod 'Crashlytics'
-  pod 'Fabric'
+  pod 'Firebase/Crashlytics'
 
 end

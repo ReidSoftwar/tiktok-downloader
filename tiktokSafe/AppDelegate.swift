@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         FirebaseApp.configure()
-        Fabric.sharedSDK().debug = true
         
         UINavigationBar.appearance().barTintColor = UIColor(red: 234.0/255.0, green: 46.0/255.0, blue: 73.0/255.0, alpha: 1.0)
         UINavigationBar.appearance().tintColor = UIColor.white
@@ -33,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        defaults.removeObject(forKey: "isNotFirstTime")
 //        defaults.set(true, forKey: "isNotFirstTime")
         
-//        let isFirstTime = keychain["isNotFirstTime"]
+        let isFirstTime = keychain["isNotFirstTime"]
         
         if defaults.bool(forKey: "isNotFirstTime") == false && isFirstTime == nil {
             

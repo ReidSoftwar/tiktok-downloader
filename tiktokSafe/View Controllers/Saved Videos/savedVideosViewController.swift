@@ -65,6 +65,13 @@ class savedVideosViewController: UICollectionViewController {
         self.defaults.removeObject(forKey: "videos")
         let nc = NotificationCenter.default
         nc.post(name: Notification.Name("needReload"), object: nil)
+        
+        if collectionView.visibleCells.count == 0 {
+            noVideosLabelView()
+        } else {
+            hidenoVideosLabel()
+        }
+        
     }
     
     @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -204,6 +211,22 @@ class savedVideosViewController: UICollectionViewController {
     let h = UIScreen.main.bounds.height
     let width = 275
     let height = 50
+    
+    var noVideosLabel = UILabel(frame: CGRect(x: 60, y: 100, width: 75, height: 75))
+    
+    func noVideosLabelView() {
+        
+        noVideosLabel = UILabel(frame: CGRect(x: (w/2) - (CGFloat(width)/2), y: (h/2) - (CGFloat(height)/2), width: CGFloat(width), height: 75))
+        
+        self.view.addSubview(noVideosLabel)
+        noVideosLabel.textColor = .lightGray
+        noVideosLabel.text = "You Don't Have Any Videos"
+        noVideosLabel.textAlignment = .center
+    }
+    
+    func hidenoVideosLabel() {
+        noVideosLabel.isHidden = true
+    }
     
     var customExportView = UIButton(frame: CGRect(x: 60, y: 100, width: 250, height: 100))
     
