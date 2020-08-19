@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>675019668441-at4d6e1l9i7hbcr0ctonssoqmuug9qan.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.675019668441-at4d6e1l9i7hbcr0ctonssoqmuug9qan</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDyT5nOVVq15YCS8EkRWRTtRMux3_HDFII</string>
+	<key>GCM_SENDER_ID</key>
+	<string>675019668441</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.reidapps.tiktokVideoDownloader</string>
+	<key>PROJECT_ID</key>
+	<string>tiktok-downloader-6f616</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tiktok-downloader-6f616.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:675019668441:ios:71954be017b8d1c477b7c8</string>
+	<key>DATABASE_URL</key>
+	<string>https://tiktok-downloader-6f616.firebaseio.com</string>
+</dict>
+</plist>

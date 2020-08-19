@@ -1,0 +1,6 @@
+framework module Pods_tiktokSafe_tiktokSafeUITests {
+  umbrella header "Pods-tiktokSafe-tiktokSafeUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
