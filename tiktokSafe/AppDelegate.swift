@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        defaults.removeObject(forKey: "isNotFirstTime")
 //        defaults.set(true, forKey: "isNotFirstTime")
         
-        let isFirstTime = keychain["isNotFirstTime"]
+//        let isFirstTime = keychain["isNotFirstTime"]
         
         if defaults.bool(forKey: "isNotFirstTime") == false && isFirstTime == nil {
             
