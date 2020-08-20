@@ -20,8 +20,15 @@ class savedVideosViewController: UICollectionViewController {
     
     var downloadArray : [String] = []
     
+    var updateOnce = false
+    
     @objc func onDidReceiveData() {
         
+        updateOnce = true
+        collectionView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         collectionView.reloadData()
     }
 
