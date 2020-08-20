@@ -101,7 +101,6 @@
 		F6FDA2AA24E5D7C00023E69C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F6FDA2AC24E5D7C90023E69C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		F6FDA2AE24E5D7D10023E69C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		F6FDA2B124E5D8190023E69C /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,7 +191,6 @@
 		F6ADAA5324D68B5A00A4B867 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				F6FDA2B024E5D80A0023E69C /* Ads */,
 				F650E8D224E5C1DC00A65E85 /* Tokens */,
 				F650E8D124E5C1BB00A65E85 /* Upload New Videos */,
 				F650E8D024E5C1A000A65E85 /* Saved Videos */,
@@ -279,14 +277,6 @@
 				F6F3E35924DF99D1001047BE /* browser.js */,
 			);
 			path = Resource;
-			sourceTree = "<group>";
-		};
-		F6FDA2B024E5D80A0023E69C /* Ads */ = {
-			isa = PBXGroup;
-			children = (
-				F6FDA2B124E5D8190023E69C /* Header.h */,
-			);
-			path = Ads;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -743,7 +733,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = A8NXV3PKL9;
+				DEVELOPMENT_TEAM = AN7P4KE6GH;
 				INFOPLIST_FILE = tiktokSafe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -764,7 +754,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A8NXV3PKL9;
+				DEVELOPMENT_TEAM = AN7P4KE6GH;
 				INFOPLIST_FILE = tiktokSafe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

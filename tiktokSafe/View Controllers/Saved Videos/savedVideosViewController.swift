@@ -66,12 +66,6 @@ class savedVideosViewController: UICollectionViewController {
         let nc = NotificationCenter.default
         nc.post(name: Notification.Name("needReload"), object: nil)
         
-        if collectionView.visibleCells.count == 0 {
-            noVideosLabelView()
-        } else {
-            hidenoVideosLabel()
-        }
-        
     }
     
     @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -158,6 +152,12 @@ class savedVideosViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! savedTiktoksCollectionViewCell
+        
+        if collectionView.visibleCells.count == 0 {
+            noVideosLabelView()
+        } else {
+            hidenoVideosLabel()
+        }
         
         if downloadArray.contains("\(plistArray[indexPath.row]!).mp4") {
             
@@ -327,6 +327,7 @@ class savedVideosViewController: UICollectionViewController {
         hud.show(in: self.view)
         
         var counter = 0
+        var deleteArray : [String] = []
         
         do {
         
@@ -352,16 +353,7 @@ class savedVideosViewController: UICollectionViewController {
                 try fileManager.removeItem(atPath: videoPath)
                 try fileManager.removeItem(atPath: imagePath)
                 
-                let plistArrayPath = paths.appending("/tiktoks.plist")
-                
-                var plistArray2 = (NSArray(contentsOfFile: plistArrayPath) as? [String])!
-                
-                while plistArray2.contains(imageTempName[0]) {
-                    if let itemToRemoveIndex = plistArray2.firstIndex(of: imageTempName[0]) {
-                        plistArray2.remove(at: itemToRemoveIndex)
-                    }
-                }
-                
+                deleteArray.append(imageTempName[0])
       
                 counter += 1
                 
@@ -372,17 +364,38 @@ class savedVideosViewController: UICollectionViewController {
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.dismiss(afterDelay: 1.0, animated: true)
                     
-                    let plistArrayDate = plistArray2 as NSArray
+                    let plistArrayPath = paths.appending("/tiktoks.plist")
                     
-                    plistArrayDate.write(toFile: plistArrayPath, atomically: true)
+                    var plistArray2 = (NSArray(contentsOfFile: plistArrayPath) as? [String])!
                     
-                    hideExportButton()
-                    hideDeleteButton()
-                    downloadArray = []
-                    cancel()
+                    var deleteCounter = 0
                     
-                    
-                    collectionView.reloadData()
+                    for name in deleteArray {
+                        
+                        while plistArray2.contains(name) {
+                            if let itemToRemoveIndex = plistArray2.firstIndex(of: name) {
+                                plistArray2.remove(at: itemToRemoveIndex)
+                                deleteCounter += 1
+                            }
+                        }
+                        
+                        if deleteCounter == deleteArray.count {
+                            
+                            let plistArrayDate = plistArray2 as NSArray
+                            
+                            plistArrayDate.write(toFile: plistArrayPath, atomically: true)
+                            
+                            hideExportButton()
+                            hideDeleteButton()
+                            downloadArray = []
+                            cancel()
+                            
+                            
+                            collectionView.reloadData()
+                            
+                        }
+                        
+                    }
                     
                     
                 }
