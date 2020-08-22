@@ -58,9 +58,6 @@ class savedVideosViewController: UICollectionViewController {
         layout.headerReferenceSize = CGSize(width: 50, height: 50)
         layout.sectionHeadersPinToVisibleBounds = true
         self.collectionView.setCollectionViewLayout(layout, animated: true)
-        
-        
-        
     }
     
     var once : Bool? = false
@@ -68,10 +65,27 @@ class savedVideosViewController: UICollectionViewController {
     var buttonCreated : Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
+        
         collectionView.reloadData()
         self.defaults.removeObject(forKey: "videos")
         let nc = NotificationCenter.default
         nc.post(name: Notification.Name("needReload"), object: nil)
+        
+        let fileManager = FileManager.default
+        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+            let path = documentDirectory.appending("/tiktoks.plist")
+        
+        if fileManager.fileExists(atPath: path) {
+            
+            plistArray = (NSArray(contentsOfFile: path) as? [String])!
+            
+            if plistArray.count != 0 {
+                hidenoVideosLabel()
+            } else {
+                noVideosLabelView()
+            }
+            
+        }
         
     }
     
@@ -159,12 +173,6 @@ class savedVideosViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! savedTiktoksCollectionViewCell
-        
-        if collectionView.visibleCells.count == 0 {
-            noVideosLabelView()
-        } else {
-            hidenoVideosLabel()
-        }
         
         if downloadArray.contains("\(plistArray[indexPath.row]!).mp4") {
             
@@ -397,6 +405,21 @@ class savedVideosViewController: UICollectionViewController {
                             downloadArray = []
                             cancel()
                             
+                            let fileManager = FileManager.default
+                            let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+                                let path = documentDirectory.appending("/tiktoks.plist")
+                            
+                            if fileManager.fileExists(atPath: path) {
+                                
+                                plistArray = (NSArray(contentsOfFile: path) as? [String])!
+                                
+                                if plistArray.count != 0 {
+                                    hidenoVideosLabel()
+                                } else {
+                                    noVideosLabelView()
+                                }
+                                
+                            }
                             
                             collectionView.reloadData()
                             

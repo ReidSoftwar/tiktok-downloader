@@ -88,6 +88,15 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
             self.tabBarController!.selectedIndex = 1
         }
         
+        if defaults.bool(forKey: "proPurchased") == true {
+            
+            premiumView.isHidden = true
+            watchAdView.isHidden = true
+            tokensLabel.isHidden = true
+            purchasedLabel()
+            
+        }
+        
     }
     
     func purchaseProduct() {
