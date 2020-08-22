@@ -25,13 +25,37 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        SwiftyStoreKit.retrieveProductsInfo(["unlimitedtokens"]) { result in
+            if let product = result.retrievedProducts.first {
+                let priceString = product.localizedPrice!
+                print("Product: \(product.localizedDescription), price: \(priceString)")
+            }
+            else if let invalidProductId = result.invalidProductIDs.first {
+                print("Invalid product identifier: \(invalidProductId)")
+            }
+            else {
+                print("Error: \(result.error!)")
+            }
+        }
+        
         premiumView.layer.cornerRadius = 8
         watchAdView.layer.cornerRadius = 8
+        
+        if defaults.bool(forKey: "proPurchased") == true {
+            
+            premiumView.isHidden = true
+            watchAdView.isHidden = true
+            tokensLabel.isHidden = true
+            purchasedLabel()
+            
+        }
         
         GADMobileAds.sharedInstance().applicationVolume = 1.0
         self.watchAdButton.isEnabled = false
         watchAdButton.alpha = 0.5
         rewardedAd = createAndLoadRewardedAd()
+        
+        verifyPurchase()
         
       }
     
@@ -62,6 +86,70 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
             let nc = NotificationCenter.default
             nc.post(name: Notification.Name("needReload"), object: nil)
             self.tabBarController!.selectedIndex = 1
+        }
+        
+    }
+    
+    func purchaseProduct() {
+        
+        SwiftyStoreKit.retrieveProductsInfo(["unlimitedtokens"]) { result in
+            if let product = result.retrievedProducts.first {
+                SwiftyStoreKit.purchaseProduct(product, quantity: 1, atomically: true) { result in
+                    
+                    switch result {
+                    case .success(let product):
+                        // fetch content from your server, then:
+                        if product.needsFinishTransaction {
+                            SwiftyStoreKit.finishTransaction(product.transaction)
+                        }
+                        print("Purchase Success: \(product.productId)")
+                        self.defaults.set(true, forKey: "proPurchased")
+                        self.premiumView.isHidden = true
+                        self.watchAdView.isHidden = true
+                        self.tokensLabel.isHidden = true
+                        self.purchasedLabel()
+                        case .error(let error):
+                        switch error.code {
+                        case .unknown: print("Unknown error. Please contact support")
+                        case .clientInvalid: print("Not allowed to make the payment")
+                        case .paymentCancelled: break
+                        case .paymentInvalid: print("The purchase identifier was invalid")
+                        case .paymentNotAllowed: print("The device is not allowed to make the payment")
+                        case .storeProductNotAvailable: print("The product is not available in the current storefront")
+                        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+                        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+                        case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+                        default: print((error as NSError).localizedDescription)
+                        }
+                    }
+                    
+                }
+            }
+        }
+        
+    }
+    
+    func verifyPurchase() {
+        
+        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "f3f4869b2a56417ba6a54a5b45971521")
+        SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
+            switch result {
+            case .success(let receipt):
+                let productId = "unlimitedtokens"
+                // Verify the purchase of Consumable or NonConsumable
+                let purchaseResult = SwiftyStoreKit.verifyPurchase(
+                    productId: productId,
+                    inReceipt: receipt)
+                    
+                switch purchaseResult {
+                case .purchased(let receiptItem):
+                    print("\(productId) is purchased: \(receiptItem)")
+                case .notPurchased:
+                    print("The user has never purchased \(productId)")
+                }
+            case .error(let error):
+                print("Receipt verification failed: \(error)")
+            }
         }
         
     }
@@ -107,21 +195,25 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
     
     @IBAction func purchaseProButtonTapped(_ sender: Any) {
         
-        SwiftyStoreKit.retrieveProductsInfo(["com.reidapps.tiktokVideoDownloader"]) { result in
-            if let product = result.retrievedProducts.first {
-                let priceString = product.localizedPrice!
-                print("Product: \(product.localizedDescription), price: \(priceString)")
-            }
-            else if let invalidProductId = result.invalidProductIDs.first {
-                print("Invalid product identifier: \(invalidProductId)")
-            }
-            else {
-                print("Error: \(result.error!)")
-            }
-        }
-        
+        purchaseProduct()
+    
     }
     
+    let w = UIScreen.main.bounds.width
+    let h = UIScreen.main.bounds.height
+    let width = 275
+    let height = 50
     
+    var noVideosLabel = UILabel(frame: CGRect(x: 60, y: 100, width: 75, height: 75))
+    
+    func purchasedLabel() {
+        
+        noVideosLabel = UILabel(frame: CGRect(x: (w/2) - (CGFloat(width)/2), y: (h/2) - (CGFloat(height)/2), width: CGFloat(width), height: 75))
+        
+        self.view.addSubview(noVideosLabel)
+        noVideosLabel.textColor = .lightGray
+        noVideosLabel.text = "Thank You For Purchasing!"
+        noVideosLabel.textAlignment = .center
+    }
 
 }

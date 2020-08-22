@@ -458,146 +458,264 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
     
     @IBAction func addTapped(_ sender: Any) {
         
-        if defaults.integer(forKey: "tokens") >= savedVideosURL.count * 10 {
-            
-            let alert = UIAlertController(title: "Are you sure?", message: "You are about to spend \(savedVideosURL.count * 10) tokens!", preferredStyle: .alert)
+        if defaults.bool(forKey: "proPurchased") == false {
+        
+            if defaults.integer(forKey: "tokens") >= savedVideosURL.count * 10 {
+                
+                let alert = UIAlertController(title: "Are you sure?", message: "You are about to spend \(savedVideosURL.count * 10) tokens!", preferredStyle: .alert)
 
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
-                
-            }))
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-                        
-                self.hud2.textLabel.text = "Loading"
-                self.hud2.show(in: self.view)
-                        
-                var dictionaryCounter = 0
-                
-                while dictionaryCounter != self.savedVideosURL.count {
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
                     
-                    self.savedVideosDictionary[self.savedVideosURL[dictionaryCounter]] = self.savedVideosThumb[dictionaryCounter]
-                    
-                    dictionaryCounter += 1
-                    
-                }
-                
-                let fileManager = FileManager.default
-                let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-                    let path = documentDirectory.appending("/tiktoks.plist")
-                    print(path)
-                
-                if (!fileManager.fileExists(atPath: path)) || fileManager.fileExists(atPath: path) {
-                    
-                    var savingCounter = 0
-                    print(self.savedVideosURL)
-                    var fileNames : [String] = []
-                    
-                    for tiktok in self.savedVideosDictionary {
-                        
-                        let randomName = UUID().uuidString
-
-                        DispatchQueue.global(qos: .background).async {
+                }))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
                             
-                            if let url = URL(string: tiktok.key),
-                                let urlData = NSData(contentsOf: url) {
-                                DispatchQueue.main.async {
-                                    
-                                    let success : Bool = urlData.write(toFile: "\(documentDirectory)/\(randomName).mp4", atomically: true)
+                    self.hud2.textLabel.text = "Loading"
+                    self.hud2.show(in: self.view)
+                            
+                    var dictionaryCounter = 0
+                    
+                    while dictionaryCounter != self.savedVideosURL.count {
+                        
+                        self.savedVideosDictionary[self.savedVideosURL[dictionaryCounter]] = self.savedVideosThumb[dictionaryCounter]
+                        
+                        dictionaryCounter += 1
+                        
+                    }
+                    
+                    let fileManager = FileManager.default
+                    let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+                        let path = documentDirectory.appending("/tiktoks.plist")
+                        print(path)
+                    
+                    if (!fileManager.fileExists(atPath: path)) || fileManager.fileExists(atPath: path) {
+                        
+                        var savingCounter = 0
+                        print(self.savedVideosURL)
+                        var fileNames : [String] = []
+                        
+                        for tiktok in self.savedVideosDictionary {
+                            
+                            let randomName = UUID().uuidString
 
-                                    if !success {
-                                        self.hud2.textLabel.text = "Error"
-                                        self.hud2.indicatorView = JGProgressHUDErrorIndicatorView()
-                                        self.hud2.dismiss(afterDelay: 1.0)
-                                    } else {
-                                        fileNames.append(randomName)
-                                        savingCounter += 1
+                            DispatchQueue.global(qos: .background).async {
+                                
+                                if let url = URL(string: tiktok.key),
+                                    let urlData = NSData(contentsOf: url) {
+                                    DispatchQueue.main.async {
                                         
-                                        self.hud2.textLabel.text = "\(savingCounter)/\(self.savedVideosDictionary.count)"
-                                        
-                                        if savingCounter == self.savedVideosURL.count {
+                                        let success : Bool = urlData.write(toFile: "\(documentDirectory)/\(randomName).mp4", atomically: true)
+
+                                        if !success {
+                                            self.hud2.textLabel.text = "Error"
+                                            self.hud2.indicatorView = JGProgressHUDErrorIndicatorView()
+                                            self.hud2.dismiss(afterDelay: 1.0)
+                                        } else {
+                                            fileNames.append(randomName)
+                                            savingCounter += 1
                                             
-                                            if fileManager.fileExists(atPath: path) {
-                                                       
-                                                var plistArray = (NSArray(contentsOfFile: path) as? [String])!
+                                            self.hud2.textLabel.text = "\(savingCounter)/\(self.savedVideosDictionary.count)"
+                                            
+                                            if savingCounter == self.savedVideosURL.count {
                                                 
-                                                plistArray.append(contentsOf: fileNames)
+                                                if fileManager.fileExists(atPath: path) {
+                                                           
+                                                    var plistArray = (NSArray(contentsOfFile: path) as? [String])!
+                                                    
+                                                    plistArray.append(contentsOf: fileNames)
+                                                    
+                                                    let something = plistArray as NSArray
+                                                    
+                                                    something.write(toFile: path, atomically: true)
+                                                           
+                                                } else {
+                                                    
+                                                    let contents = fileNames as NSArray
+                                                    
+                                                    contents.write(toFile: path, atomically: true)
+                                                    
+                                                }
                                                 
-                                                let something = plistArray as NSArray
-                                                
-                                                something.write(toFile: path, atomically: true)
-                                                       
-                                            } else {
-                                                
-                                                let contents = fileNames as NSArray
-                                                
-                                                contents.write(toFile: path, atomically: true)
-                                                
+                                                self.defaults.set(self.defaults.integer(forKey: "tokens") - self.savedVideosURL.count * 10, forKey: "tokens")
+                                                self.hud2.textLabel.text = "Success"
+                                                let nc = NotificationCenter.default
+                                                nc.post(name: Notification.Name("needReload"), object: nil)
+                                                self.hud2.indicatorView = JGProgressHUDSuccessIndicatorView()
+                                                self.hud2.dismiss(afterDelay: 1.0, animated: true)
+                                                sleep(UInt32(3.5))
+                                                self.navigationController?.popViewController(animated: true)
+                                            } else if savingCounter > self.savedVideosURL.count {
+                                                print("error")
                                             }
                                             
-                                            self.defaults.set(self.defaults.integer(forKey: "tokens") - self.savedVideosURL.count * 10, forKey: "tokens")
-                                            self.hud2.textLabel.text = "Success"
-                                            let nc = NotificationCenter.default
-                                            nc.post(name: Notification.Name("needReload"), object: nil)
-                                            self.hud2.indicatorView = JGProgressHUDSuccessIndicatorView()
-                                            self.hud2.dismiss(afterDelay: 1.0, animated: true)
-                                            sleep(UInt32(3.5))
-                                            self.navigationController?.popViewController(animated: true)
-                                        } else if savingCounter > self.savedVideosURL.count {
-                                            print("error")
+                                        }
+
+                                        
+                                    }
+                                }
+                                
+                                if let url = URL(string: tiktok.value),
+                                    let urlData = NSData(contentsOf: url) {
+                                    DispatchQueue.main.async {
+                                        
+                                        let success : Bool = urlData.write(toFile: "\(documentDirectory)/\(randomName).png", atomically: true)
+
+                                        if !success {
+                                            savingCounter += 1
+                                            self.hud2.textLabel.text = "Error"
+                                            self.hud2.indicatorView = JGProgressHUDErrorIndicatorView()
+                                            self.hud2.dismiss(afterDelay: 1.0)
                                         }
                                         
                                     }
-
-                                    
                                 }
+                                
                             }
                             
-                            if let url = URL(string: tiktok.value),
-                                let urlData = NSData(contentsOf: url) {
-                                DispatchQueue.main.async {
-                                    
-                                    let success : Bool = urlData.write(toFile: "\(documentDirectory)/\(randomName).png", atomically: true)
-
-                                    if !success {
-                                        savingCounter += 1
-                                        self.hud2.textLabel.text = "Error"
-                                        self.hud2.indicatorView = JGProgressHUDErrorIndicatorView()
-                                        self.hud2.dismiss(afterDelay: 1.0)
-                                    }
-                                    
-                                }
-                            }
                             
                         }
+                              
+                    } else {
                         
+                        self.hud.textLabel.text = "Error"
+                        self.hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        self.hud.dismiss(afterDelay: 1.0)
+
                         
                     }
-                          
-                } else {
                     
-                    self.hud.textLabel.text = "Error"
-                    self.hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                    self.hud.dismiss(afterDelay: 1.0)
-
-                    
-                }
+                }))
                 
-            }))
-            
-            self.present(alert, animated: true)
+                self.present(alert, animated: true)
+                
+            } else {
+                
+                let alert = UIAlertController(title: "Not Enough Tokens!", message: "You need \((savedVideosURL.count * 10) - defaults.integer(forKey: "tokens")) more tokens to download these videos", preferredStyle: .alert)
+
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { action in
+                    
+                }))
+                alert.addAction(UIAlertAction(title: "Get More", style: .default, handler: { action in
+                    self.navigationController?.popViewController(animated: true)
+                    self.tabBarController!.selectedIndex = 0
+                }))
+                
+                self.present(alert, animated: true)
+                
+            }
             
         } else {
             
-            let alert = UIAlertController(title: "Not Enough Tokens!", message: "You need \((savedVideosURL.count * 10) - defaults.integer(forKey: "tokens")) more tokens to download these videos", preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { action in
-                
-            }))
-            alert.addAction(UIAlertAction(title: "Get More", style: .default, handler: { action in
-                self.navigationController?.popViewController(animated: true)
-                self.tabBarController!.selectedIndex = 0
-            }))
+            self.hud2.textLabel.text = "Loading"
+            self.hud2.show(in: self.view)
+                    
+            var dictionaryCounter = 0
             
-            self.present(alert, animated: true)
+            while dictionaryCounter != self.savedVideosURL.count {
+                
+                self.savedVideosDictionary[self.savedVideosURL[dictionaryCounter]] = self.savedVideosThumb[dictionaryCounter]
+                
+                dictionaryCounter += 1
+                
+            }
+            
+            let fileManager = FileManager.default
+            let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+                let path = documentDirectory.appending("/tiktoks.plist")
+                print(path)
+            
+            if (!fileManager.fileExists(atPath: path)) || fileManager.fileExists(atPath: path) {
+                
+                var savingCounter = 0
+                print(self.savedVideosURL)
+                var fileNames : [String] = []
+                
+                for tiktok in self.savedVideosDictionary {
+                    
+                    let randomName = UUID().uuidString
+
+                    DispatchQueue.global(qos: .background).async {
+                        
+                        if let url = URL(string: tiktok.key),
+                            let urlData = NSData(contentsOf: url) {
+                            DispatchQueue.main.async {
+                                
+                                let success : Bool = urlData.write(toFile: "\(documentDirectory)/\(randomName).mp4", atomically: true)
+
+                                if !success {
+                                    self.hud2.textLabel.text = "Error"
+                                    self.hud2.indicatorView = JGProgressHUDErrorIndicatorView()
+                                    self.hud2.dismiss(afterDelay: 1.0)
+                                } else {
+                                    fileNames.append(randomName)
+                                    savingCounter += 1
+                                    
+                                    self.hud2.textLabel.text = "\(savingCounter)/\(self.savedVideosDictionary.count)"
+                                    
+                                    if savingCounter == self.savedVideosURL.count {
+                                        
+                                        if fileManager.fileExists(atPath: path) {
+                                                   
+                                            var plistArray = (NSArray(contentsOfFile: path) as? [String])!
+                                            
+                                            plistArray.append(contentsOf: fileNames)
+                                            
+                                            let something = plistArray as NSArray
+                                            
+                                            something.write(toFile: path, atomically: true)
+                                                   
+                                        } else {
+                                            
+                                            let contents = fileNames as NSArray
+                                            
+                                            contents.write(toFile: path, atomically: true)
+                                            
+                                        }
+                                        self.hud2.textLabel.text = "Success"
+                                        let nc = NotificationCenter.default
+                                        nc.post(name: Notification.Name("needReload"), object: nil)
+                                        self.hud2.indicatorView = JGProgressHUDSuccessIndicatorView()
+                                        self.hud2.dismiss(afterDelay: 1.0, animated: true)
+                                        sleep(UInt32(3.5))
+                                        self.navigationController?.popViewController(animated: true)
+                                    } else if savingCounter > self.savedVideosURL.count {
+                                        print("error")
+                                    }
+                                    
+                                }
+
+                                
+                            }
+                        }
+                        
+                        if let url = URL(string: tiktok.value),
+                            let urlData = NSData(contentsOf: url) {
+                            DispatchQueue.main.async {
+                                
+                                let success : Bool = urlData.write(toFile: "\(documentDirectory)/\(randomName).png", atomically: true)
+
+                                if !success {
+                                    savingCounter += 1
+                                    self.hud2.textLabel.text = "Error"
+                                    self.hud2.indicatorView = JGProgressHUDErrorIndicatorView()
+                                    self.hud2.dismiss(afterDelay: 1.0)
+                                }
+                                
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                }
+                      
+            } else {
+                
+                self.hud.textLabel.text = "Error"
+                self.hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                self.hud.dismiss(afterDelay: 1.0)
+
+                
+            }
             
         }
         
@@ -691,13 +809,23 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if (kind == UICollectionView.elementKindSectionHeader) {
+            
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "uploadHeader", for: indexPath) as! tokenCollectionReusableView
             
-            headerView.tokenLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
-            headerView.backgroundColor = .black
-            
-            
-            return headerView
+            if defaults.bool(forKey: "proPurchased") == false {
+                
+                headerView.tokenLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
+                headerView.backgroundColor = .black
+                
+                
+                return headerView
+                
+            } else {
+                
+                headerView.isHidden = true
+                return headerView
+                
+            }
         }
         
         fatalError()

@@ -510,13 +510,24 @@ class savedVideosViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if (kind == UICollectionView.elementKindSectionHeader) {
+            
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "tokensHeader", for: indexPath) as! tokensHeaderSavedVideosCollectionReusableView
             
-            headerView.tokensLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
-            headerView.backgroundColor = .black
+            if defaults.bool(forKey: "proPurchased") == false {
+                
+                headerView.tokensLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
+                headerView.backgroundColor = .black
+                
+                return headerView
+                
+            } else {
+                
+                headerView.isHidden = true
+                
+                
+                return headerView
+            }
             
-            
-            return headerView
         }
     
         fatalError()
