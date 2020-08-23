@@ -13,7 +13,7 @@ class settingsViewController: UIViewController {
     
     let defaults = UserDefaults.standard
     
-    var settingsArray = ["Purchase Pro", "Restore Purchase", "Change User Tag", "Share App"]
+    var settingsArray = ["Purchase Pro", "Restore Purchase", "Change Username", "Share App"]
     var settingsImageArray = [UIImage(named: "proIcon"), UIImage(named: "restoreProIcon"), UIImage(named: "changeUserIcon"), UIImage(named: "shareAppIcon")]
 
     @IBOutlet weak var tableView: UITableView!
@@ -105,7 +105,7 @@ extension settingsViewController: UITableViewDataSource, UITableViewDelegate {
         
         if defaults.bool(forKey: "proPurchased") == true {
         
-            settingsArray = ["Change User Tag", "Share App"]
+            settingsArray = ["Change Username", "Share App"]
             settingsImageArray = [UIImage(named: "changeUserIcon"), UIImage(named: "shareAppIcon")]
         
         }
@@ -124,7 +124,7 @@ extension settingsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if settingsArray[indexPath.row] == "Change User Tag" {
+        if settingsArray[indexPath.row] == "Change Username" {
             self.performSegue(withIdentifier: "changeUserSegue", sender: nil)
         } else if settingsArray[indexPath.row] == "Share App" {
             let sms: String = "sms:&body=Hey, check out this cool app! https://abc123.com"
