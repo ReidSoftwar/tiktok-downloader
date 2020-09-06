@@ -55,7 +55,13 @@ class savedVideosViewController: UICollectionViewController {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 1.5
         layout.minimumInteritemSpacing = 1
-        layout.headerReferenceSize = CGSize(width: 50, height: 50)
+        
+        if self.defaults.bool(forKey: "proPurchased") {
+            layout.headerReferenceSize = CGSize(width: 0, height: 0)
+        } else {
+            layout.headerReferenceSize = CGSize(width: 50, height: 50)
+        }
+        
         layout.sectionHeadersPinToVisibleBounds = true
         self.collectionView.setCollectionViewLayout(layout, animated: true)
     }
@@ -65,6 +71,24 @@ class savedVideosViewController: UICollectionViewController {
     var buttonCreated : Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        let cellSize = CGSize(width:(self.collectionView.frame.size.width - 3)/4 , height:160.5)
+
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.itemSize = cellSize
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumLineSpacing = 1.5
+        layout.minimumInteritemSpacing = 1
+        
+        if self.defaults.bool(forKey: "proPurchased") {
+            layout.headerReferenceSize = CGSize(width: 0, height: 0)
+        } else {
+            layout.headerReferenceSize = CGSize(width: 50, height: 50)
+        }
+        
+        layout.sectionHeadersPinToVisibleBounds = true
+        self.collectionView.setCollectionViewLayout(layout, animated: true)
         
         collectionView.reloadData()
         self.defaults.removeObject(forKey: "videos")
@@ -85,6 +109,8 @@ class savedVideosViewController: UICollectionViewController {
                 noVideosLabelView()
             }
             
+        } else {
+            noVideosLabelView()
         }
         
     }
@@ -243,17 +269,40 @@ class savedVideosViewController: UICollectionViewController {
         noVideosLabel.isHidden = true
     }
     
+    // Checks if the phone has a home button for constraint purposes
+    
+    var hasNotch: Bool {
+        let bottom = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        return bottom > 0
+    }
+    
     var customExportView = UIButton(frame: CGRect(x: 60, y: 100, width: 250, height: 100))
     
     func exportView() {
-        customExportView = UIButton(frame: CGRect(x: (w/2) - (CGFloat(width)/2), y: h - (h/3.7), width: CGFloat(width), height: CGFloat(height)))
-        self.view.addSubview(customExportView)
-        customExportView.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-        customExportView.setTitle("Export to Camera Roll", for: .normal)
-        customExportView.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
-        customExportView.cornerRadius = 25
-        customExportView.isHidden = false
-        customExportView.isEnabled = true
+        
+        if !hasNotch {
+            
+            customExportView = UIButton(frame: CGRect(x: (w/2) - (CGFloat(width)/2), y: h - (h/3.4), width: CGFloat(width), height: CGFloat(height)))
+            self.view.addSubview(customExportView)
+            customExportView.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+            customExportView.setTitle("Export to Camera Roll", for: .normal)
+            customExportView.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+            customExportView.cornerRadius = 25
+            customExportView.isHidden = false
+            customExportView.isEnabled = true
+            
+        } else {
+            
+            customExportView = UIButton(frame: CGRect(x: (w/2) - (CGFloat(width)/2), y: h - (h/3.7), width: CGFloat(width), height: CGFloat(height)))
+            self.view.addSubview(customExportView)
+            customExportView.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+            customExportView.setTitle("Export to Camera Roll", for: .normal)
+            customExportView.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+            customExportView.cornerRadius = 25
+            customExportView.isHidden = false
+            customExportView.isEnabled = true
+            
+        }
     }
     
     func hideExportButton() {
@@ -556,5 +605,7 @@ class savedVideosViewController: UICollectionViewController {
         fatalError()
         
     }
+    
+    
 
 }

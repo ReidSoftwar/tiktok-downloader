@@ -127,7 +127,7 @@ extension settingsViewController: UITableViewDataSource, UITableViewDelegate {
         if settingsArray[indexPath.row] == "Change Username" {
             self.performSegue(withIdentifier: "changeUserSegue", sender: nil)
         } else if settingsArray[indexPath.row] == "Share App" {
-            let sms: String = "sms:&body=Hey, check out this cool app! https://abc123.com"
+            let sms: String = "sms:&body=Hey, check out this cool app! https://apps.apple.com/us/app/id1528438259"
             let strURL: String = sms.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
             UIApplication.shared.open(URL.init(string: strURL)!, options: [:], completionHandler: nil)
         } else if settingsArray[indexPath.row] == "Restore Purchase" {

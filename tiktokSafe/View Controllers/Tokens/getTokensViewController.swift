@@ -16,6 +16,8 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
     @IBOutlet weak var tokensLabel: UILabel!
     @IBOutlet weak var premiumView: UIView!
     @IBOutlet weak var watchAdView: UIView!
+    @IBOutlet weak var rateAppView: UIView!
+    @IBOutlet weak var rateAppButton: UIButton!
     
     
     let defaults = UserDefaults.standard
@@ -40,12 +42,14 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
         
         premiumView.layer.cornerRadius = 8
         watchAdView.layer.cornerRadius = 8
+        rateAppView.layer.cornerRadius = 8
         
         if defaults.bool(forKey: "proPurchased") == true {
             
             premiumView.isHidden = true
             watchAdView.isHidden = true
             tokensLabel.isHidden = true
+            rateAppView.isHidden = true
             purchasedLabel()
             
         }
@@ -93,6 +97,7 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
             premiumView.isHidden = true
             watchAdView.isHidden = true
             tokensLabel.isHidden = true
+            rateAppView.isHidden = true
             purchasedLabel()
             
         }
@@ -115,6 +120,7 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
                         self.defaults.set(true, forKey: "proPurchased")
                         self.premiumView.isHidden = true
                         self.watchAdView.isHidden = true
+                        self.rateAppView.isHidden = true
                         self.tokensLabel.isHidden = true
                         self.purchasedLabel()
                         case .error(let error):
@@ -224,5 +230,41 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
         noVideosLabel.text = "Thank You For Purchasing!"
         noVideosLabel.textAlignment = .center
     }
+    
+    func rateApp() {
+        if #available(iOS 10.3, *) {
+            SKStoreReviewController.requestReview()
+
+        } else if let url = URL(string: "itms-apps://itunes.apple.com/app/" + "id1528438259") {
+            UIApplication.shared.open(url, options: [:], completionHandler: { (newStatus: Bool) in
+
+                if (newStatus == true) {
+                    self.appRated()
+                }
+                else {
+                    print("no")
+                }
+                
+            })
+        }
+    }
+    
+    func appRated() {
+        
+        rateAppView.isHidden = true
+        rateAppButton.isEnabled = false
+        
+        let previousAmount = defaults.integer(forKey: "tokens")
+        self.defaults.set(100 + previousAmount, forKey: "tokens")
+        
+    }
+    
+    @IBAction func rateAppButtonTapped(_ sender: Any) {
+        
+       rateApp()
+        
+    }
+    
+    
 
 }

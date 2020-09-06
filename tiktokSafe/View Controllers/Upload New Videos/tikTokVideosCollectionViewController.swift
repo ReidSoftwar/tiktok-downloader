@@ -49,7 +49,13 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 1.5
         layout.minimumInteritemSpacing = 1
-        layout.headerReferenceSize = CGSize(width: 50, height: 50)
+        
+        if self.defaults.bool(forKey: "proPurchased") {
+            layout.headerReferenceSize = CGSize(width: 0, height: 0)
+        } else {
+            layout.headerReferenceSize = CGSize(width: 50, height: 50)
+        }
+        
         layout.sectionHeadersPinToVisibleBounds = true
         self.collectionView.setCollectionViewLayout(layout, animated: true)
         
