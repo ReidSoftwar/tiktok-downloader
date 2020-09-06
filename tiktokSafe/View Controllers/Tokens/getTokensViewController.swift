@@ -61,7 +61,7 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
     
     func createAndLoadRewardedAd() -> GADRewardedAd? {
         
-        rewardedAd = GADRewardedAd(adUnitID: "ca-app-pub-3940256099942544/1712485313")
+        rewardedAd = GADRewardedAd(adUnitID: "ca-app-pub-9177412731525460/1342848204")
         rewardedAd?.load(GADRequest()) { error in
           if let error = error {
             print("Loading failed: \(error)")
