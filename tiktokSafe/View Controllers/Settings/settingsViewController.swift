@@ -66,6 +66,7 @@ class settingsViewController: UIViewController {
                     let inputValue = self.codeTextField?.text
                     if inputValue == "2486736" {
                         self.defaults.set(true, forKey: "proPurchased")
+                        self.tableView.reloadData()
                     }
                     alertController.dismiss(animated: true, completion: nil)
                 }))
