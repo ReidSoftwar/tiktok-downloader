@@ -298,6 +298,12 @@
                                     <constraint firstAttribute="height" constant="100" id="pAk-IN-3jy"/>
                                 </constraints>
                             </imageView>
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9S6-3I-5C2">
+                                <rect key="frame" x="32" y="120" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -320,6 +326,8 @@
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="zkw-tb-DSu"/>
                     <connections>
+                        <outlet property="codeTextField" destination="9S6-3I-5C2" id="QyG-lQ-JVV"/>
+                        <outlet property="logoImage" destination="pvh-6q-ckG" id="73y-dd-xFu"/>
                         <outlet property="tableView" destination="KiM-oA-gZP" id="Lwo-ED-4oW"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="logout" modalPresentationStyle="fullScreen" id="TiZ-4Z-DhB"/>
                         <segue destination="c7g-Aa-Ebs" kind="show" identifier="changeUserSegue" id="wMm-Yv-de4"/>

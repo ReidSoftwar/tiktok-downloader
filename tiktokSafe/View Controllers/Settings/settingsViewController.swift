@@ -12,26 +12,89 @@ import SwiftyStoreKit
 class settingsViewController: UIViewController {
     
     let defaults = UserDefaults.standard
+    var freeProCounter = 0
+    var tapped3times = false
     
     var settingsArray = ["Purchase Pro", "Restore Purchase", "Change Username", "Share App"]
     var settingsImageArray = [UIImage(named: "proIcon"), UIImage(named: "restoreProIcon"), UIImage(named: "changeUserIcon"), UIImage(named: "shareAppIcon")]
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var logoImage: UIImageView!
+    @IBOutlet weak var codeTextField: UITextField!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        freeProCounter = 0
+        tapped3times = false
         verifyPurchase()
+        self.becomeFirstResponder()
         tableView.reloadData()
         tableView.isScrollEnabled = false
         self.tableView.tableFooterView = UIView()
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        logoImage.isUserInteractionEnabled = true
+        logoImage.addGestureRecognizer(tapGestureRecognizer)
+        
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+
+    // Enable detection of shake motion
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake && tapped3times == true {
+            
+            if defaults.bool(forKey: "proPurchased") == false {
+                
+                let alertController = UIAlertController(title: "Welcome Friend of Ryan!", message: "Type in access code...", preferredStyle: .alert)
+                  alertController.addTextField { (pTextField) in
+                  pTextField.placeholder = "Access Code..."
+                  pTextField.clearButtonMode = .whileEditing
+                  pTextField.borderStyle = .none
+                    self.codeTextField = pTextField
+                }
+
+                // create Ok button
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (pAction) in
+                  // when user taps OK, you get your value here
+                    let inputValue = self.codeTextField?.text
+                    if inputValue == "2486736" {
+                        self.defaults.set(true, forKey: "proPurchased")
+                    }
+                    alertController.dismiss(animated: true, completion: nil)
+                }))
+
+                // show alert controller
+                self.present(alertController, animated: true, completion: nil)
+                
+            }
+
+        }
+    }
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        
+        freeProCounter += 1
+        
+        if freeProCounter >= 3 {
+            tapped3times = true
+        }
+
+        // Your action
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
         tableView.reloadData()
+        freeProCounter = 0
+        tapped3times = false
         
     }
     
