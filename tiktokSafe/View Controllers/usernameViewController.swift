@@ -63,7 +63,7 @@ class usernameViewController: UIViewController, WKNavigationDelegate, WKUIDelega
                     
                     if self.defaults.bool(forKey: "isNotFirstTime") == false {
                             
-                        self.defaults.set(true, forKey: "isFirstTime")
+                        self.defaults.set(true, forKey: "isNotFirstTime")
                         self.defaults.set(100, forKey: "tokens")
                             
                         let alert = UIAlertController(title: "Welcome New User!", message: "You have receieved \(self.defaults.integer(forKey: "tokens")) free tokens!", preferredStyle: .alert)

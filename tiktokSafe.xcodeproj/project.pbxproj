@@ -343,7 +343,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1160;
-				ORGANIZATIONNAME = "Ryan Reid";
+				ORGANIZATIONNAME = "Reid Apps";
 				TargetAttributes = {
 					F6BE30E524D6226900386D4B = {
 						CreatedOnToolsVersion = 11.6;
@@ -732,6 +732,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reidapps.tiktokVideoDownloader;
 				PRODUCT_NAME = "Tiktok Downloader";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -753,6 +754,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reidapps.tiktokVideoDownloader;
 				PRODUCT_NAME = "Tiktok Downloader";
 				SWIFT_OBJC_BRIDGING_HEADER = "";

@@ -55,6 +55,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if defaults.bool(forKey: "isNotFirstTime") == false && isFirstTime == nil {
             
             keychain["isNotFirstTime"] = "true"
+            self.defaults.set(false, forKey: "isNotFirstTime")
+            
+        } else {
+            
+            self.defaults.set(true, forKey: "isNotFirstTime")
             
         }
         
