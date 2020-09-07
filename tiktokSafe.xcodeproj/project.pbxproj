@@ -732,7 +732,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reidapps.tiktokVideoDownloader;
 				PRODUCT_NAME = "Tiktok Downloader";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -754,7 +754,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reidapps.tiktokVideoDownloader;
 				PRODUCT_NAME = "Tiktok Downloader";
 				SWIFT_OBJC_BRIDGING_HEADER = "";

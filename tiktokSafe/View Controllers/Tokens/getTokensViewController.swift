@@ -118,6 +118,8 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
                         }
                         print("Purchase Success: \(product.productId)")
                         self.defaults.set(true, forKey: "proPurchased")
+                        let nc = NotificationCenter.default
+                        nc.post(name: Notification.Name("needReload"), object: nil)
                         self.premiumView.isHidden = true
                         self.watchAdView.isHidden = true
                         self.rateAppView.isHidden = true
@@ -186,6 +188,9 @@ class getTokensViewController: UIViewController, GADRewardedAdDelegate {
         let previousAmount = defaults.integer(forKey: "tokens")
         
         defaults.set(Int(truncating: reward.amount) + previousAmount, forKey: "tokens")
+        
+        let nc = NotificationCenter.default
+        nc.post(name: Notification.Name("needReload"), object: nil)
         
     }
     // Tells the delegate that the rewarded ad was presented.

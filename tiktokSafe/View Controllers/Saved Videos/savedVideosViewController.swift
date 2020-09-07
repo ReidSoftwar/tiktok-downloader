@@ -29,6 +29,7 @@ class savedVideosViewController: UICollectionViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         collectionView.reloadData()
     }
 
@@ -71,6 +72,7 @@ class savedVideosViewController: UICollectionViewController {
     var buttonCreated : Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
         let cellSize = CGSize(width:(self.collectionView.frame.size.width - 3)/4 , height:160.5)
 

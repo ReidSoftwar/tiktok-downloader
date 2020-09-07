@@ -67,6 +67,8 @@ class settingsViewController: UIViewController {
                     if inputValue == "2486736" {
                         self.defaults.set(true, forKey: "proPurchased")
                         self.tableView.reloadData()
+                        let nc = NotificationCenter.default
+                        nc.post(name: Notification.Name("needReload"), object: nil)
                     }
                     alertController.dismiss(animated: true, completion: nil)
                 }))
@@ -114,6 +116,8 @@ class settingsViewController: UIViewController {
                         print("Purchase Success: \(product.productId)")
                         self.defaults.set(true, forKey: "proPurchased")
                         self.tableView.reloadData()
+                        let nc = NotificationCenter.default
+                        nc.post(name: Notification.Name("needReload"), object: nil)
                         case .error(let error):
                         switch error.code {
                         case .unknown: print("Unknown error. Please contact support")
@@ -203,6 +207,8 @@ extension settingsViewController: UITableViewDataSource, UITableViewDelegate {
                     print("Restore Success: \(results.restoredPurchases)")
                     self.defaults.set(true, forKey: "proPurchased")
                     self.tableView.reloadData()
+                    let nc = NotificationCenter.default
+                    nc.post(name: Notification.Name("needReload"), object: nil)
                 }
                 else {
                     print("Nothing to Restore")
@@ -223,6 +229,8 @@ extension settingsViewController: UITableViewDataSource, UITableViewDelegate {
                     print("Restore Success: \(results.restoredPurchases)")
                     self.defaults.set(true, forKey: "proPurchased")
                     self.tableView.reloadData()
+                    let nc = NotificationCenter.default
+                    nc.post(name: Notification.Name("needReload"), object: nil)
                 }
                 else {
                     self.purchaseProduct()

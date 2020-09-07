@@ -67,9 +67,14 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
 
         webView.navigationDelegate = self
         webView.uiDelegate = self
+        
+        let username = defaults.string(forKey: "username")
+        
+        let string = "https://www.tiktok.com/@\(username!)"
 
-        let url = URL(string: "https://www.tiktok.com/@\(defaults.string(forKey: "username")!)")!
-        webView.load(URLRequest(url: url))
+        let url = URL(string: string.trimmingCharacters(in: .whitespaces))
+        
+        webView.load(URLRequest(url: url!))
         webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
         webView.allowsBackForwardNavigationGestures = true
         webView.evaluateJavaScript("window.open = function(open) { return function (url, name, features) { window.location.href = url; return window; }; } (window.open);", completionHandler: nil)
@@ -231,7 +236,7 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
                                                                 
                                                                 self.progressCounter += 1
                                                                 
-                                                                let url = URL(string: "https://www.tiktok.com/@\(self.defaults.string(forKey: "username")!)")!
+                                                                let url = URL(string: ("https://www.tiktok.com/@\(self.defaults.string(forKey: "username")!)").trimmingCharacters(in: .whitespaces))!
                                                                 self.webView.load(URLRequest(url: url))
                                                             }
                                                         }
@@ -270,7 +275,7 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
                             self.webView.navigationDelegate = self
                             self.webView.uiDelegate = self
 
-                            let url = URL(string: "https://www.tiktok.com/@\(self.defaults.string(forKey: "username")!)")!
+                            let url = URL(string: ("https://www.tiktok.com/@\(self.defaults.string(forKey: "username")!)").trimmingCharacters(in: .whitespaces))!
                             self.webView.load(URLRequest(url: url))
                             self.webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
                             self.webView.allowsBackForwardNavigationGestures = true
