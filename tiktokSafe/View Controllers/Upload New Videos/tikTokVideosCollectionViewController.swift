@@ -91,8 +91,8 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
 
         // Add Banner Ad
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        // bannerView.adUnitID = "ca-app-pub-9177412731525460/2358957530" <-- My Ad Unit
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+         bannerView.adUnitID = "ca-app-pub-9177412731525460/2358957530" //<-- My Ad Unit
+//        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
         addBannerViewToView(bannerView)

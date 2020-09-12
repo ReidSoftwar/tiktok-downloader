@@ -42,8 +42,8 @@ class savedVideosViewController: UICollectionViewController, GADBannerViewDelega
             
             // Add Banner Ad
             bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-//            bannerView.adUnitID = "ca-app-pub-9177412731525460/2358957530" <-- My Ad Unit
-            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+            bannerView.adUnitID = "ca-app-pub-9177412731525460/2358957530" //<-- My Ad Unit
+//            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
             bannerView.rootViewController = self
             bannerView.load(GADRequest())
             addBannerViewToView(bannerView)
@@ -90,8 +90,8 @@ class savedVideosViewController: UICollectionViewController, GADBannerViewDelega
     }
     
     func createAndLoadInterstitial() -> GADInterstitial {
-      // interstitial = GADInterstitial(adUnitID: "ca-app-pub-9177412731525460/4546137178") <-- My Ad Unit
-      interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+       interstitial = GADInterstitial(adUnitID: "ca-app-pub-9177412731525460/4546137178") //<-- My Ad Unit
+//      interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
       interstitial.delegate = self
       interstitial.load(GADRequest())
       return interstitial
@@ -610,7 +610,7 @@ class savedVideosViewController: UICollectionViewController, GADBannerViewDelega
             
         } else {
             
-            if adCounter >= 5 && interstitial.isReady == true {
+            if adCounter >= 5 && interstitial.isReady == true && !defaults.bool(forKey: "proPurchased") {
                 
                 interstitial.present(fromRootViewController: self)
                 

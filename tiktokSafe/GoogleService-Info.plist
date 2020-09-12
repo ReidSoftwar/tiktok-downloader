@@ -32,5 +32,7 @@
 	<string>1:675019668441:ios:71954be017b8d1c477b7c8</string>
 	<key>DATABASE_URL</key>
 	<string>https://tiktok-downloader-6f616.firebaseio.com</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-9177412731525460~2176777099</string>
 </dict>
 </plist>

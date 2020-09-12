@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		252EE5B572C6CC1ECC176CBA /* Pods_tiktokSafe_tiktokSafeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD829F800A72F1E85221C358 /* Pods_tiktokSafe_tiktokSafeUITests.framework */; };
 		91A1CACC235F59BFF261AA1B /* Pods_tiktokSafeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC2C209FC8FECD3253D311EA /* Pods_tiktokSafeTests.framework */; };
+		9721E2DF250D7DDF003DBB3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9721E2DE250D7DDE003DBB3F /* GoogleService-Info.plist */; };
 		985B31A620CA177900B00EFB /* Pods_tiktokSafe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB31A5269D1842BBCB5142F6 /* Pods_tiktokSafe.framework */; };
 		F61B7E8B24D8C0F00053B3C8 /* savedVideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61B7E8A24D8C0F00053B3C8 /* savedVideosViewController.swift */; };
 		F61B7E8D24D8C1200053B3C8 /* getTokensViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61B7E8C24D8C1200053B3C8 /* getTokensViewController.swift */; };
 		F61B7E8F24D8C1380053B3C8 /* settingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61B7E8E24D8C1380053B3C8 /* settingsViewController.swift */; };
-		F6335CE124EC9176002EE79A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6335CE024EC9176002EE79A /* GoogleService-Info.plist */; };
 		F650976A24DB6B6600D1A619 /* tikTokVideosCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F650976924DB6B6600D1A619 /* tikTokVideosCollectionViewController.swift */; };
 		F650E8CB24E4C20300A65E85 /* savedTiktoksCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F650E8CA24E4C20300A65E85 /* savedTiktoksCollectionViewCell.swift */; };
 		F650E8CF24E5BFAB00A65E85 /* tokensHeaderSavedVideosCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F650E8CE24E5BFAB00A65E85 /* tokensHeaderSavedVideosCollectionReusableView.swift */; };
@@ -59,6 +59,7 @@
 		026E9C5BD1381E668034B555 /* Pods-tiktokSafe-tiktokSafeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tiktokSafe-tiktokSafeUITests.debug.xcconfig"; path = "Target Support Files/Pods-tiktokSafe-tiktokSafeUITests/Pods-tiktokSafe-tiktokSafeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		13B4E90C8F46953372236C24 /* Pods-tiktokSafe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tiktokSafe.debug.xcconfig"; path = "Target Support Files/Pods-tiktokSafe/Pods-tiktokSafe.debug.xcconfig"; sourceTree = "<group>"; };
 		6484FAC20F0680FDA2D00813 /* Pods-tiktokSafe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tiktokSafe.release.xcconfig"; path = "Target Support Files/Pods-tiktokSafe/Pods-tiktokSafe.release.xcconfig"; sourceTree = "<group>"; };
+		9721E2DE250D7DDE003DBB3F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BC2C209FC8FECD3253D311EA /* Pods_tiktokSafeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tiktokSafeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD829F800A72F1E85221C358 /* Pods_tiktokSafe_tiktokSafeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tiktokSafe_tiktokSafeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE0AD25930173A162AE6F48D /* Pods-tiktokSafeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tiktokSafeTests.debug.xcconfig"; path = "Target Support Files/Pods-tiktokSafeTests/Pods-tiktokSafeTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		F61B7E8A24D8C0F00053B3C8 /* savedVideosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = savedVideosViewController.swift; sourceTree = "<group>"; };
 		F61B7E8C24D8C1200053B3C8 /* getTokensViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getTokensViewController.swift; sourceTree = "<group>"; };
 		F61B7E8E24D8C1380053B3C8 /* settingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsViewController.swift; sourceTree = "<group>"; };
-		F6335CE024EC9176002EE79A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F650976924DB6B6600D1A619 /* tikTokVideosCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tikTokVideosCollectionViewController.swift; sourceTree = "<group>"; };
 		F650E8CA24E4C20300A65E85 /* savedTiktoksCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = savedTiktoksCollectionViewCell.swift; sourceTree = "<group>"; };
 		F650E8CE24E5BFAB00A65E85 /* tokensHeaderSavedVideosCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tokensHeaderSavedVideosCollectionReusableView.swift; sourceTree = "<group>"; };
@@ -231,7 +231,7 @@
 				F6BE30F724D6227400386D4B /* LaunchScreen.storyboard */,
 				F6BE30FA24D6227400386D4B /* Info.plist */,
 				F6BE30F224D6226900386D4B /* tiktokSafe.xcdatamodeld */,
-				F6335CE024EC9176002EE79A /* GoogleService-Info.plist */,
+				9721E2DE250D7DDE003DBB3F /* GoogleService-Info.plist */,
 			);
 			path = tiktokSafe;
 			sourceTree = "<group>";
@@ -388,7 +388,7 @@
 				F6F3E35A24DF99D1001047BE /* browser.js in Resources */,
 				F6BE30F624D6227400386D4B /* Assets.xcassets in Resources */,
 				F6BE30F124D6226900386D4B /* Main.storyboard in Resources */,
-				F6335CE124EC9176002EE79A /* GoogleService-Info.plist in Resources */,
+				9721E2DF250D7DDF003DBB3F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
