@@ -14,10 +14,11 @@ import JGProgressHUD
 import Darwin
 import Alamofire
 import AlamofireImage
+import GoogleMobileAds
 
 private let reuseIdentifier = "videoCell"
 
-class tikTokVideosCollectionViewController: UICollectionViewController, WKNavigationDelegate, WKUIDelegate {
+class tikTokVideosCollectionViewController: UICollectionViewController, WKNavigationDelegate, WKUIDelegate, GADBannerViewDelegate {
     
     var webView = WKWebView()
     
@@ -52,8 +53,10 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
         
         if self.defaults.bool(forKey: "proPurchased") {
             layout.headerReferenceSize = CGSize(width: 0, height: 0)
+            layout.footerReferenceSize = CGSize(width: 0, height: 0)
         } else {
             layout.headerReferenceSize = CGSize(width: 50, height: 50)
+            layout.footerReferenceSize = CGSize(width: 50, height: 50)
         }
         
         layout.sectionHeadersPinToVisibleBounds = true
@@ -81,18 +84,41 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
         
     }
     
-//    private let childView = UIView();
+    var bannerView: GADBannerView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        childView.frame = CGRect(x: 80, y: 100, width: self.collectionView.frame.size.width, height: 100)
-//
-//        // Set child view background color.
-//        childView.backgroundColor = UIColor.green
-//
-//        self.view.addSubview(childView);
+        // Add Banner Ad
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        // bannerView.adUnitID = "ca-app-pub-9177412731525460/2358957530" <-- My Ad Unit
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+        addBannerViewToView(bannerView)
+        bannerView.delegate = self
         
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                attribute: .bottom,
+                relatedBy: .equal,
+                toItem: bottomLayoutGuide,
+                attribute: .top,
+                multiplier: 1,
+                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                attribute: .centerX,
+                relatedBy: .equal,
+                toItem: view,
+                attribute: .centerX,
+                multiplier: 1,
+                constant: 0)
+            ])
     }
     
     let hud = JGProgressHUD(style: .dark)
@@ -282,120 +308,6 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
                             self.webView.evaluateJavaScript("window.open = function(open) { return function (url, name, features) { window.location.href = url; return window; }; } (window.open);", completionHandler: nil)
                             
                         }
-                                     
-//                        self.webView.evaluateJavaScript("document.documentElement.outerHTML") { (html, error) in
-//                              guard let html = html as? String else {
-//                                  print(error!)
-//                                  return
-//                              }
-//
-//                              // GET UID
-//                              if let rangeFound = html.range(of: "://user/profile/") {
-//
-//                                  let y = rangeFound.upperBound
-//
-//                                  let unfinishedUID = String(html[y...])
-//
-//                                  var positionCounter = -1
-//                                  for char in unfinishedUID {
-//
-//                                      positionCounter += 1
-//
-//                                      if char == "?" {
-//
-//                                          positionCounter += 1
-//
-//                                          let totalCharacters = unfinishedUID.count
-//                                          var finishedUID = String(unfinishedUID.dropLast(totalCharacters - positionCounter))
-//
-//                                          finishedUID = finishedUID.replacingOccurrences(of: "\"", with: "")
-//                                          finishedUID = finishedUID.replacingOccurrences(of: "?", with: "")
-//                                          print(finishedUID)
-//
-//                                          self.defaults.set(finishedUID, forKey: "uid")
-//
-//                                          let newUrl = "https://m.tiktok.com/api/item_list/?aid=1988&app_name=tiktok_web&device_platform=web&referer=https:%2F%2Fwww.google.com%2F&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_5)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F84.0.4147.105+Safari%2F537.36&cookie_enabled=true&screen_width=1536&screen_height=960&browser_language=en-US&browser_platform=MacIntel&browser_name=Mozilla&browser_version=5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_5)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F84.0.4147.105+Safari%2F537.36&browser_online=true&timezone_name=America%2FLos_Angeles&priority_region=&appId=1233&region=US&appType=m&isAndroid=false&isMobile=false&isIOS=false&OS=mac&did=\(self.defaults.string(forKey: "web_id")!)&count=50&id=\(self.defaults.string(forKey: "uid")!)&type=1&secUid=&maxCursor=0&minCursor=0&sourceType=8&language=en&verifyFp=\(self.defaults.string(forKey: "verify") ?? "")"
-//
-//                                          webView.evaluateJavaScript("window.byted_acrawler.sign({ url: \"\(newUrl)\" })") { (result, error) in
-//                                              if error == nil {
-//
-//                                                  self.defaults.set(result!, forKey: "signature")
-//
-//                                                let getUrl = "https://m.tiktok.com/api/item_list/?aid=1988&app_name=tiktok_web&device_platform=web&referer=https:%2F%2Fwww.google.com%2F&user_agent=Mozilla%2F5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_5)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F84.0.4147.105+Safari%2F537.36&cookie_enabled=true&screen_width=1536&screen_height=960&browser_language=en-US&browser_platform=MacIntel&browser_name=Mozilla&browser_version=5.0+(Macintosh%3B+Intel+Mac+OS+X+10_15_5)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F84.0.4147.105+Safari%2F537.36&browser_online=true&timezone_name=America%2FLos_Angeles&priority_region=&appId=1233&region=US&appType=m&isAndroid=false&isMobile=false&isIOS=false&OS=mac&did=\(self.defaults.string(forKey: "web_id")!)&count=50&id=\(self.defaults.string(forKey: "uid")!)&type=1&secUid=&maxCursor=0&minCursor=0&sourceType=8&language=en&verifyFp=\(self.defaults.string(forKey: "verify")!)&_signature=\(self.defaults.string(forKey: "signature") ?? "")"
-//
-//                                                  sleep(UInt32(2))
-//
-//                                                  // create get request
-//                                                  let url = URL(string: getUrl)!
-//                                                  var request = URLRequest(url: url)
-//                                                  request.httpMethod = "GET"
-//
-//                                                  request.setValue("gzip, deflate, br", forHTTPHeaderField: "Accept-Encoding")
-//                                                  request.setValue("Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1", forHTTPHeaderField: "User-Agent")
-//
-//                                                  let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//                                                      guard let data = data, error == nil else {
-//                                                          print(error?.localizedDescription ?? "No data")
-//                                                          return
-//                                                      }
-//
-//                                                      let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-//                                                      if let responseJSON = responseJSON as? [String:Any] {
-//
-//                                                          print(responseJSON)
-//
-//                                                          if responseJSON["items"] != nil {
-//                                                              let videos = responseJSON["items"]! as! NSArray
-//                                                              self.defaults.set(videos, forKey: "videos")
-//
-//                                                              DispatchQueue.main.async {
-//                                                                  self.hud.dismiss()
-//                                                                  self.activityIndicator.stopAnimating()
-//
-//                                                                  self.done = true
-//
-//                                                                  self.collectionView!.reloadData()
-//
-//
-//                                                              }
-//                                                          } else {
-//                                                              print(self.defaults.string(forKey: "verify")!)
-//                                                              DispatchQueue.main.async {
-//
-//                                                                  self.clean()
-//
-//                                                                  self.hud.textLabel.text = "Retrying (\(self.progressCounter))"
-//
-//                                                                  self.progressCounter += 1
-//
-//                                                                  let url = URL(string: "https://www.tiktok.com/@\(self.defaults.string(forKey: "username")!)")!
-//                                                                self.webView.load(URLRequest(url: url))
-//                                                              }
-//                                                          }
-//
-//
-//                                                      }
-//
-//                                                  }
-//
-//                                                  task.resume()
-//
-//                                              } else {
-//
-//                                                  print(error!)
-//
-//                                              }
-//                                          }
-//
-//                                          break
-//
-//                                      }
-//                                  }
-//
-//                              }
-//
-//                          }
-                                      
                                   
                         
                     }
@@ -836,29 +748,91 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        if (kind == UICollectionView.elementKindSectionHeader) {
+        switch kind {
             
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "uploadHeader", for: indexPath) as! tokenCollectionReusableView
+            case UICollectionView.elementKindSectionFooter:
             
-            if defaults.bool(forKey: "proPurchased") == false {
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "adFooter", for: indexPath)
                 
-                headerView.tokenLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
-                headerView.backgroundColor = .black
+                if defaults.bool(forKey: "proPurchased") == false {
+                    
+                    footerView.backgroundColor = .black
+                    return footerView
+                    
+                } else {
+                    
+                    footerView.isHidden = true
+                    return footerView
+                }
+            
+            case UICollectionView.elementKindSectionHeader:
+            
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "uploadHeader", for: indexPath) as! tokenCollectionReusableView
                 
-                
-                return headerView
-                
-            } else {
-                
-                headerView.isHidden = true
-                return headerView
-                
-            }
+                if defaults.bool(forKey: "proPurchased") == false {
+                    
+                    headerView.tokenLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
+                    headerView.backgroundColor = .black
+                    
+                    return headerView
+                    
+                } else {
+                    
+                    headerView.isHidden = true
+                    
+                    
+                    return headerView
+                }
+            
+            default:
+            
+                fatalError()
+            
         }
         
-        fatalError()
-        
     }
+    
+    
+    // ------------------------------------------------------------ Banner Ads ------------------------------------------------------------ //
+    
+    
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        bannerView.alpha = 0
+        UIView.animate(withDuration: 1, animations: {
+          bannerView.alpha = 1
+        })
+        print("adViewDidReceiveAd")
+    }
+
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+        didFailToReceiveAdWithError error: GADRequestError) {
+      print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+      print("adViewWillPresentScreen")
+    }
+
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+      print("adViewWillDismissScreen")
+    }
+
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+      print("adViewDidDismissScreen")
+    }
+
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+      print("adViewWillLeaveApplication")
+    }
+    
     
 }
 

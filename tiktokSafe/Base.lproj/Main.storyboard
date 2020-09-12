@@ -672,7 +672,7 @@
                             <size key="itemSize" width="128" height="128"/>
                             <size key="estimatedItemSize" width="100" height="160.5"/>
                             <size key="headerReferenceSize" width="50" height="50"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -731,6 +731,10 @@
                                 <outlet property="tokensLabel" destination="FuJ-Nt-Icd" id="LQX-c0-8cB"/>
                             </connections>
                         </collectionReusableView>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="adFooter" id="RVq-9F-pGq">
+                            <rect key="frame" x="0.0" y="210.66666666666666" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="GGo-PL-yEg" id="sBt-NY-MoN"/>
                             <outlet property="delegate" destination="GGo-PL-yEg" id="hdv-yI-jfU"/>
@@ -760,7 +764,7 @@
                             <size key="itemSize" width="128" height="128"/>
                             <size key="estimatedItemSize" width="100" height="160.5"/>
                             <size key="headerReferenceSize" width="50" height="50"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -818,6 +822,10 @@
                             <connections>
                                 <outlet property="tokenLabel" destination="Yqo-4B-TZc" id="0os-7r-6Wy"/>
                             </connections>
+                        </collectionReusableView>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="adFooter" id="bG6-yc-fQi">
+                            <rect key="frame" x="0.0" y="210.66666666666666" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="fOJ-Hs-Pua" id="suh-uZ-wgE"/>

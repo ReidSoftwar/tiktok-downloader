@@ -11,15 +11,17 @@ import AVKit
 import Photos
 import AVFoundation
 import JGProgressHUD
+import GoogleMobileAds
 
 private let reuseIdentifier = "savedVideoCell"
 
-class savedVideosViewController: UICollectionViewController {
+class savedVideosViewController: UICollectionViewController, GADBannerViewDelegate, GADInterstitialDelegate {
+    
+    var bannerView: GADBannerView!
+    var interstitial: GADInterstitial!
     
     let defaults = UserDefaults.standard
-    
     var downloadArray : [String] = []
-    
     var updateOnce = false
     
     @objc func onDidReceiveData() {
@@ -35,6 +37,24 @@ class savedVideosViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if !defaults.bool(forKey: "proPurchased") {
+            
+            // Add Banner Ad
+            bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+//            bannerView.adUnitID = "ca-app-pub-9177412731525460/2358957530" <-- My Ad Unit
+            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+            bannerView.rootViewController = self
+            bannerView.load(GADRequest())
+            addBannerViewToView(bannerView)
+            bannerView.delegate = self
+            
+            // Add Interstitial Ad
+            interstitial = createAndLoadInterstitial()
+            let request = GADRequest()
+            interstitial.load(request)
+            
+        }
         
         downloadArray = []
         
@@ -59,12 +79,22 @@ class savedVideosViewController: UICollectionViewController {
         
         if self.defaults.bool(forKey: "proPurchased") {
             layout.headerReferenceSize = CGSize(width: 0, height: 0)
+            layout.footerReferenceSize = CGSize(width: 0, height: 0)
         } else {
             layout.headerReferenceSize = CGSize(width: 50, height: 50)
+            layout.footerReferenceSize = CGSize(width: 50, height: 50)
         }
         
         layout.sectionHeadersPinToVisibleBounds = true
         self.collectionView.setCollectionViewLayout(layout, animated: true)
+    }
+    
+    func createAndLoadInterstitial() -> GADInterstitial {
+      // interstitial = GADInterstitial(adUnitID: "ca-app-pub-9177412731525460/4546137178") <-- My Ad Unit
+      interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+      interstitial.delegate = self
+      interstitial.load(GADRequest())
+      return interstitial
     }
     
     var once : Bool? = false
@@ -85,8 +115,10 @@ class savedVideosViewController: UICollectionViewController {
         
         if self.defaults.bool(forKey: "proPurchased") {
             layout.headerReferenceSize = CGSize(width: 0, height: 0)
+            layout.footerReferenceSize = CGSize(width: 0, height: 0)
         } else {
             layout.headerReferenceSize = CGSize(width: 50, height: 50)
+            layout.footerReferenceSize = CGSize(width: 50, height: 50)
         }
         
         layout.sectionHeadersPinToVisibleBounds = true
@@ -117,6 +149,27 @@ class savedVideosViewController: UICollectionViewController {
         
     }
     
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
+    }
+    
     @objc func longPressed(sender: UILongPressGestureRecognizer) {
         if once == false {
             collectionView.reloadData()
@@ -124,9 +177,7 @@ class savedVideosViewController: UICollectionViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
             
             self.title = "Select Videos"
-            
-            
-            
+
             once = true
         }
     }
@@ -259,7 +310,7 @@ class savedVideosViewController: UICollectionViewController {
     
     func noVideosLabelView() {
         
-        noVideosLabel = UILabel(frame: CGRect(x: (w/2) - (CGFloat(width)/2), y: (h/2) - (CGFloat(height)/2), width: CGFloat(width), height: 75))
+        noVideosLabel.frame = CGRect(x: (w/2) - (CGFloat(width)/2), y: (h/2) - (CGFloat(height)/2), width: CGFloat(width), height: 75)
         
         self.view.addSubview(noVideosLabel)
         noVideosLabel.textColor = .lightGray
@@ -268,7 +319,7 @@ class savedVideosViewController: UICollectionViewController {
     }
     
     func hidenoVideosLabel() {
-        noVideosLabel.isHidden = true
+        noVideosLabel.removeFromSuperview()
     }
     
     // Checks if the phone has a home button for constraint purposes
@@ -493,13 +544,17 @@ class savedVideosViewController: UICollectionViewController {
         }
 
     }
-
+    
+    
+    var adCounter = 0
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         let cell = collectionView.cellForItem(at: indexPath) as! savedTiktoksCollectionViewCell
         
         if once == true {
+            
+            adCounter += 1
             
             let fileName = "\(plistArray[indexPath.row]!).mp4"
             
@@ -554,6 +609,16 @@ class savedVideosViewController: UICollectionViewController {
             }
             
         } else {
+            
+            if adCounter >= 5 && interstitial.isReady == true {
+                
+                interstitial.present(fromRootViewController: self)
+                
+                adCounter = 0
+                
+            } else {
+                adCounter += 1
+            }
         
             let fileName = "\(plistArray[indexPath.row]!).mp4"
             
@@ -583,29 +648,123 @@ class savedVideosViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        if (kind == UICollectionView.elementKindSectionHeader) {
+        switch kind {
             
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "tokensHeader", for: indexPath) as! tokensHeaderSavedVideosCollectionReusableView
+            case UICollectionView.elementKindSectionFooter:
             
-            if defaults.bool(forKey: "proPurchased") == false {
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "adFooter", for: indexPath)
                 
-                headerView.tokensLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
-                headerView.backgroundColor = .black
+                if defaults.bool(forKey: "proPurchased") == false {
+                    
+                    footerView.backgroundColor = .black
+                    return footerView
+                    
+                } else {
+                    
+                    footerView.isHidden = true
+                    return footerView
+                }
+            
+            case UICollectionView.elementKindSectionHeader:
+            
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "tokensHeader", for: indexPath) as! tokensHeaderSavedVideosCollectionReusableView
                 
-                return headerView
-                
-            } else {
-                
-                headerView.isHidden = true
-                
-                
-                return headerView
-            }
+                if defaults.bool(forKey: "proPurchased") == false {
+                    
+                    headerView.tokensLabel.text = "Tokens: \(defaults.integer(forKey: "tokens"))"
+                    headerView.backgroundColor = .black
+                    
+                    return headerView
+                    
+                } else {
+                    
+                    headerView.isHidden = true
+                    
+                    
+                    return headerView
+                }
+            
+            default:
+            
+                fatalError()
             
         }
-    
-        fatalError()
         
+    }
+    
+    // ------------------------------------------------------------ Banner Ads ------------------------------------------------------------ //
+    
+    
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        bannerView.alpha = 0
+        UIView.animate(withDuration: 1, animations: {
+          bannerView.alpha = 1
+        })
+        print("adViewDidReceiveAd")
+    }
+
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+        didFailToReceiveAdWithError error: GADRequestError) {
+      print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+      print("adViewWillPresentScreen")
+    }
+
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+      print("adViewWillDismissScreen")
+    }
+
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+      print("adViewDidDismissScreen")
+    }
+
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+      print("adViewWillLeaveApplication")
+    }
+    
+    
+    // ------------------------------------------------------------ Interstitial Ads ------------------------------------------------------------ //
+    
+    /// Tells the delegate an ad request succeeded.
+    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
+      print("interstitialDidReceiveAd")
+    }
+
+    /// Tells the delegate an ad request failed.
+    func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
+      print("interstitial:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    /// Tells the delegate that an interstitial will be presented.
+    func interstitialWillPresentScreen(_ ad: GADInterstitial) {
+      print("interstitialWillPresentScreen")
+    }
+
+    /// Tells the delegate the interstitial is to be animated off the screen.
+    func interstitialWillDismissScreen(_ ad: GADInterstitial) {
+      print("interstitialWillDismissScreen")
+    }
+
+    /// Tells the delegate the interstitial had been animated off the screen.
+    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
+        interstitial = createAndLoadInterstitial()
+        print("interstitialDidDismissScreen")
+    }
+
+    /// Tells the delegate that a user click will open another app
+    /// (such as the App Store), backgrounding the current app.
+    func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
+      print("interstitialWillLeaveApplication")
     }
     
     
