@@ -37,6 +37,8 @@ class tikTokVideosCollectionViewController: UICollectionViewController, WKNaviga
     
     override func viewWillAppear(_ animated: Bool) {
         
+        self.title = "\(defaults.string(forKey: "username")!)'s Videos"
+        
         if let button = self.navigationItem.rightBarButtonItem {
             button.isEnabled = false
             button.tintColor = UIColor.clear
